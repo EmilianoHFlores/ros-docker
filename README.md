@@ -3,10 +3,12 @@ This repository contains easy to use commands for generating custom docker image
 
 ## Execution
 ### Starting Containers
-Each ROS/ROS2 image has corresponding sudo Makefile commands for easy execution. First, run the build command:
+
+Each ROS/ROS2 image has corresponding sudo Makefile commands for easy execution. First, start at repo directory and run the build command:
 ```bash
+cd ros-docker
 sudo make <ros-distro>.build # No CUDA support
-sudo make <ros-distro>.cuda.build # With CUDA support
+sudo make <ros-distro>.build.cuda # With CUDA support
 ```
 Then, run the run command for creating the container:
 ```bash
