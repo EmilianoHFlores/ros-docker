@@ -17,14 +17,35 @@ if [[ "$@" == *"--net "* ]]; then
     DOCKER_NETWORK_ARGS=""
 fi
 
+# Receive ROS version from command line, through the --ros-distro argument
+for i in "$@"
+do
+case $i in
+    --ros-distro=*)
+    ROS_DISTRO="${i#*=}"
+    echo "ROS distro set to: $ROS_DISTRO"
+    shift # past argument=value
+    ;;
+    --use-cuda)
+    USE_CUDA=YES
+    shift # past argument with no value
+    ;;
+    *)
+          # unknown option
+    ;;
+esac
+done
+
 # CHECK IF argument USE_CUDA is passed
 DOCKER_GPU_ARGS=""
-if [[ "$@" == *"--use-cuda"* ]]; then
+if [ -n "$USE_CUDA" ]; then
     DOCKER_GPU_ARGS="--gpus all"
-    echo "Using NVIDIA GPU"
+    echo "Using CUDA"
 fi
 
 DOCKER_COMMAND="docker run"
+
+IMAGE_NAME="ros-$ROS_DISTRO"
 
 xhost +
 $DOCKER_COMMAND -it -d\
@@ -41,6 +62,6 @@ $DOCKER_COMMAND -it -d\
     --device /dev/video0:/dev/video0 \
     -v "$PWD/projects:/projects" \
     -w /projects \
-    --name=ros2-humble \
-    ros2-humble \
+    --name=$IMAGE_NAME \
+    $IMAGE_NAME \
     bash

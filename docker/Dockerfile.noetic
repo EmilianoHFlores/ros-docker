@@ -1,0 +1,22 @@
+FROM althack/ros:noetic-full
+LABEL maintainer="Emiliano Flores <A00833160@tec.mx>"
+# Install dependencies.
+RUN apt-get update -qq && apt-get install -y  build-essential \
+    ffmpeg libsm6 libxext6 autoconf libtool mesa-utils \
+    terminator nano git wget curl iputils-ping \
+    libcanberra-gtk-module libcanberra-gtk3-module \
+    ros-dev-tools 
+    
+# Additional ROS tools
+RUN apt install -y ros-noetic-teleop-twist-keyboard \
+    ros-noetic-moveit ros-noetic-navigation
+
+# Gazebo classic install
+RUN apt install -y ros-noetic-gazebo-ros-pkgs \
+    ros-noetic-gazebo-ros \
+    ros-noetic-gazebo-plugins && \
+    curl -sSL http://get.gazebosim.org | sh
+
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+
+ENTRYPOINT [ "/bin/bash", "-l", "-c" ]

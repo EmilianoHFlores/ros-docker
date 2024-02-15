@@ -30,16 +30,29 @@ sudo make <ros-distro>.remove # Remove container
 
 ## Current Images
 
+- [ROS Noetic](./docker/Dockerfile.noetic)
+```bash
+sudo make noetic.build
+sudo make noetic.create
+```
+
+- [ROS Noetic with CUDA11.8](./docker/Dockerfile.noetic.cuda)
+```bash
+sudo make noetic.build.cuda
+sudo make noetic.create.cuda
+```
+
 - [ROS Humble](./docker/Dockerfile.humble)
 ```bash
 sudo make humble.build
 sudo make humble.create
 ```
-- [ROS Humble with CUDA11.8 and Pytorch 2.0](./docker/Dockerfile.humble.cuda)
+- [ROS Humble with CUDA11.8](./docker/Dockerfile.humble.cuda)
 ```bash
 sudo make humble.build.cuda
 sudo make humble.create.cuda
 ```
+
 
 ## Docker container settings
 The docker containers are set to use the host network and display, as well as devices such as webcam. It also mounts the projects folder for use ready-to-go use. On the run scripts at docker/scripts, these settings may be edited.
