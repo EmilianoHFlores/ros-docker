@@ -21,20 +21,24 @@ noetic.build:
 noetic.build.cuda:
 	@./docker/scripts/build.bash --ros-distro=noetic --use-cuda
 
-# Create containers
+
+# ----------------------------CREATE------------------------------------
+
+# Create containers, receive arguments --volume
 humble.create:
-	@./docker/scripts/run.bash --ros-distro=humble
+	@./docker/scripts/run.bash --ros-distro=humble --volumes=$(volumes) --name=$(name)
 
 # Create containers with CUDA support
 humble.create.cuda:
-	@./docker/scripts/run.bash --ros-distro=humble --use-cuda
+	@./docker/scripts/run.bash --ros-distro=humble --use-cuda --volumes=$(volumes) --name=$(name)
 
 noetic.create:
-	@./docker/scripts/run.bash --ros-distro=noetic
+	@./docker/scripts/run.bash --ros-distro=noetic --volumes=$(volumes) --name=$(name)
 
-noetic.create.cuda:
-	@./docker/scripts/run.bash --ros-distro=noetic --use-cuda
+noetic.create.cuda: 
+	@./docker/scripts/run.bash --ros-distro=noetic --use-cuda --volumes=$(volumes) --name=$(name)
 
+# ----------------------------START------------------------------------
 # Start containers
 humble.up:
 	@xhost +
@@ -44,6 +48,7 @@ noetic.up:
 	@xhost +
 	@docker start ros-noetic
 
+# ----------------------------STOP------------------------------------
 # Stop containers
 humble.down:
 	@docker stop ros-humble 
@@ -51,6 +56,7 @@ humble.down:
 noetic.down:
 	@docker stop ros-noetic
 
+# ----------------------------RESTART------------------------------------
 # Restart containers
 humble.restart:
 	@docker restart ros-humble 
@@ -58,6 +64,7 @@ humble.restart:
 noetic.restart:
 	@docker restart ros-noetic
 
+# ----------------------------LOGS------------------------------------
 # Logs of the container
 humble.logs:
 	@docker logs --tail 50 ros-humble 
@@ -65,6 +72,7 @@ humble.logs:
 noetic.logs:
 	@docker logs --tail 50 ros-noetic
 
+# ----------------------------SHELL------------------------------------
 # Fires up a bash session inside the container
 humble.shell:
 	@docker exec -it --user $(shell id -u):$(shell id -g) ros-humble bash
@@ -72,6 +80,7 @@ humble.shell:
 noetic.shell:
 	@docker exec -it --user $(shell id -u):$(shell id -g) ros-noetic bash
 
+# ----------------------------REMOVE------------------------------------
 # Remove container
 humble.remove:
 	@docker container rm ros-humble 

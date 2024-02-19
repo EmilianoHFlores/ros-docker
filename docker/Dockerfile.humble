@@ -30,5 +30,6 @@ RUN apt install -y ros-humble-ros-gz \
     && apt update && apt install -y ignition-fortress
 
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+RUN mkdir /workspace
 
 ENTRYPOINT [ "/bin/bash", "-l", "-c" ]

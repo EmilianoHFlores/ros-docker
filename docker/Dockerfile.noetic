@@ -18,5 +18,6 @@ RUN apt install -y ros-noetic-gazebo-ros-pkgs \
     curl -sSL http://get.gazebosim.org | sh
 
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+RUN mkdir /workspace
 
 ENTRYPOINT [ "/bin/bash", "-l", "-c" ]

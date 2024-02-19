@@ -17,24 +17,57 @@ if [[ "$@" == *"--net "* ]]; then
     DOCKER_NETWORK_ARGS=""
 fi
 
-# Receive ROS version from command line, through the --ros-distro argument
+VOLUME_COMMANDS=""
 for i in "$@"
 do
 case $i in
+    # Receive ROS version from command line, through the --ros-distro argument
     --ros-distro=*)
     ROS_DISTRO="${i#*=}"
     echo "ROS distro set to: $ROS_DISTRO"
     shift # past argument=value
     ;;
+    # Receive the --use-cuda argument
     --use-cuda)
     USE_CUDA=YES
     shift # past argument with no value
+    ;;
+    # Receive volumes to mount from command line, through the --volumes argument, each volume should be separated by a comma
+    --volumes=*)
+    for volume in $(echo ${i#*=} | tr "," "\n")
+    do
+        # If the path starts with ~, expand it to the user's home directory
+        if [[ "$volume" == ~* ]]; then
+            resolved_path="${volume/#\~/$HOME}"
+        else
+            resolved_path=$(realpath "$volume")
+        fi
+        folder_name=$(basename "$resolved_path")
+        VOLUME_COMMANDS="$VOLUME_COMMANDS -v $resolved_path:/workspace/$folder_name"
+    done
+    shift # past argument=value
+    ;;
+    --name=*)
+    # if the name is not empty, set the container name
+    if [ -n "${i#*=}" ]; then
+        CONTAINER_NAME="${i#*=}"
+    fi
+    shift # past argument=value
     ;;
     *)
           # unknown option
     ;;
 esac
 done
+
+IMAGE_NAME="ros-$ROS_DISTRO"
+
+if [ -z "$CONTAINER_NAME" ]; then
+    CONTAINER_NAME="ros-$ROS_DISTRO"
+fi
+
+echo "Container name: $CONTAINER_NAME"
+echo "Volumes to mount: $VOLUME_COMMANDS"
 
 # CHECK IF argument USE_CUDA is passed
 DOCKER_GPU_ARGS=""
@@ -44,8 +77,6 @@ if [ -n "$USE_CUDA" ]; then
 fi
 
 DOCKER_COMMAND="docker run"
-
-IMAGE_NAME="ros-$ROS_DISTRO"
 
 xhost +
 $DOCKER_COMMAND -it -d\
@@ -60,8 +91,8 @@ $DOCKER_COMMAND -it -d\
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /dev:/dev \
     --device /dev/video0:/dev/video0 \
-    -v "$PWD/projects:/projects" \
-    -w /projects \
-    --name=$IMAGE_NAME \
+    $VOLUME_COMMANDS \
+    -w /workspace \
+    --name=$CONTAINER_NAME \
     $IMAGE_NAME \
     bash
