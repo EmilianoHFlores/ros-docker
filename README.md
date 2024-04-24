@@ -16,6 +16,13 @@ Then, log out and log back in so that your group membership is re-evaluated.
 ### NVIDIA Container Toolkit
 If you are using a GPU, install the NVIDIA Container Toolkit. The installation instructions can be found [here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
 
+### Nvidia Jetson Devices
+A regular Jetpack installation should be enough to run the containers without major issues. Follor the [docker post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/) to allow the docker daemon to run without sudo. If problems arise when using graphical applications, run the following command to give your user permission to the video group:
+```bash
+sudo usermod -aG video $USER
+```
+Restart your bash session or the Jetson to apply changes. Check [dustynv repository](https://github.com/dusty-nv/jetson-containers) for further information on running the containers and on Jetpack versions compatibility.
+
 ### Cloning the repository
 Clone the repository to your local machine:
 ```bash
@@ -31,11 +38,13 @@ Each ROS/ROS2 image has corresponding Makefile commands for easy execution. Firs
 cd ros-docker
 make <ros-distro>.build # No CUDA support
 make <ros-distro>.build.cuda # With CUDA support
+make <ros-distro>.build.l4t<l4t-version> # No CUDA support
 ```
 Then, run the run command for creating the container:
 ```bash
 make <ros-distro>.create # No CUDA support
 make <ros-distro>.create.cuda # With CUDA support
+make <ros-distro>.create.l4t<l4t-version> # No CUDA support
 ```
 Finally, run the start command for starting the container and entering the shell:
 ```bash
