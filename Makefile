@@ -13,6 +13,10 @@ humble.build:
 humble.build.cuda:
 	@./docker/scripts/build.bash --ros-distro=humble --use-cuda
 
+# Jetson L4T 35.2.1
+humble.build.jetson.35.2.1:
+	@./docker/scripts/build.bash --ros-distro=humble --l4t=35.2.1
+
 # ---------NOETIC----------
 
 noetic.build:
@@ -32,6 +36,10 @@ humble.create:
 humble.create.cuda:
 	@./docker/scripts/run.bash --ros-distro=humble --use-cuda --volumes=$(volumes) --name=$(name)
 
+humble.create.jetson.35.2.1:
+	@./docker/scripts/run.bash --ros-distro=humble --l4t=35.2.1 --volumes=$(volumes) --name=$(name)
+
+# Create containers with Noetic
 noetic.create:
 	@./docker/scripts/run.bash --ros-distro=noetic --volumes=$(volumes) --name=$(name)
 

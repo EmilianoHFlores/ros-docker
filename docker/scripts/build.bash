@@ -13,6 +13,13 @@ case $i in
     USE_CUDA=YES
     shift # past argument with no value
     ;;
+    --l4t=*)
+    # if l4t is not empty, set the l4t version
+    if [ -n "${i#*=}" ]; then
+        L4T_VERSION="${i#*=}"
+    fi
+    shift # past argument=value
+    ;;
     *)
           # unknown option
     ;;
@@ -26,14 +33,27 @@ if [ -z "$ROS_DISTRO" ]; then
 fi
 
 DOCKER_FILE="$PWD/docker/Dockerfile.${ROS_DISTRO}"
+IMAGE_NAME="emilianh/ros:$ROS_DISTRO"
 echo "Building for docker distro: $ROS_DISTRO"
 
 if [ -n "$USE_CUDA" ]; then
     DOCKER_FILE="$PWD/docker/Dockerfile.${ROS_DISTRO}.cuda"
+    IMAGE_NAME="emilianh/ros:$ROS_DISTRO-cuda"
     echo "Using CUDA"
 fi
 
-echo $DOCKER_FILE
+if [ -n "$L4T_VERSION" ]; then
+    DOCKER_FILE="$PWD/docker/Dockerfile.${ROS_DISTRO}.l4t${L4T_VERSION}"
+    IMAGE_NAME="emilianh/ros:$ROS_DISTRO-l4t${L4T_VERSION}"
+    echo "Using L4T $L4T_VERSION"
+fi
 
-docker build -t ros-$ROS_DISTRO \
-    -f $DOCKER_FILE $PWD
+USER_UID=$(id -u)
+USER_GID=$(id -g)
+echo "User UID: $USER_UID"
+echo "User GID: $USER_GID"
+echo "Building image: $IMAGE_NAME"
+echo "Using Dockerfile: $DOCKER_FILE"
+
+docker build -t $IMAGE_NAME \
+    -f $DOCKER_FILE $PWD --build-arg USER_UID=$USER_UID --build-arg USER_GID=$USER_GID

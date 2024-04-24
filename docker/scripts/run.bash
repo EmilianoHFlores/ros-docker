@@ -6,6 +6,8 @@ export LOCAL_GROUP_ID=`id -g $USER`
 export LOCAL_GROUP_NAME=`id -gn $USER`
 DOCKER_USER_ARGS="--env LOCAL_USER_ID --env LOCAL_GROUP_ID --env LOCAL_GROUP_NAME"
 
+ADDITIONAL_COMMANDS=""
+
 # Variables for forwarding ssh agent into docker container
 SSH_AUTH_ARGS=""
 if [ ! -z $SSH_AUTH_SOCK ]; then
@@ -54,13 +56,21 @@ case $i in
     fi
     shift # past argument=value
     ;;
+    --l4t=*)
+    # if l4t is not empty, set the l4t version
+    if [ -n "${i#*=}" ]; then
+        L4T_VERSION="${i#*=}"
+        ADDITIONAL_COMMANDS+=" --runtime nvidia"
+    fi
+    shift # past argument=value
+    ;;
     *)
           # unknown option
     ;;
 esac
 done
 
-IMAGE_NAME="ros-$ROS_DISTRO"
+IMAGE_NAME="emilianh/ros:$ROS_DISTRO"
 
 if [ -z "$CONTAINER_NAME" ]; then
     CONTAINER_NAME="ros-$ROS_DISTRO"
@@ -73,7 +83,13 @@ echo "Volumes to mount: $VOLUME_COMMANDS"
 DOCKER_GPU_ARGS=""
 if [ -n "$USE_CUDA" ]; then
     DOCKER_GPU_ARGS="--gpus all"
+    IMAGE_NAME="emilianh/ros:$ROS_DISTRO-cuda"
     echo "Using CUDA"
+fi
+
+if [ -n "$L4T_VERSION" ]; then
+    IMAGE_NAME="emilianh/ros:$ROS_DISTRO-l4t$L4T_VERSION"
+    echo "Using L4T $L4T_VERSION"
 fi
 
 DOCKER_COMMAND="docker run"
