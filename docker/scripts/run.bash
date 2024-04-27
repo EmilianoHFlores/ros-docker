@@ -60,7 +60,9 @@ case $i in
     # if l4t is not empty, set the l4t version
     if [ -n "${i#*=}" ]; then
         L4T_VERSION="${i#*=}"
-        ADDITIONAL_COMMANDS+=" --runtime nvidia"
+        ADDITIONAL_COMMANDS+=" --runtime nvidia -v /sys/class/gpio:/sys/class/gpio \
+        -v /sys/class/pwm:/sys/class/pwm --device /dev/spidev0.0:/dev/spidev0.0:rw \
+        --device /dev/i2c-8:/dev/i2c-8:rw"
     fi
     shift # past argument=value
     ;;

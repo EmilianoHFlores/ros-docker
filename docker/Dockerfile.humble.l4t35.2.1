@@ -42,3 +42,13 @@ RUN apt-get update && apt-get install -y git-core bash-completion \
 
 ENV DEBIAN_FRONTEND=
 ENV AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS=1
+
+FROM user AS tools
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  terminator nmap net-tools gedit nano
+
+RUN pip install Jetson.GPIO
+
+RUN echo "force_color_prompt=yes" >> /home/$USERNAME/.bashrc
+
