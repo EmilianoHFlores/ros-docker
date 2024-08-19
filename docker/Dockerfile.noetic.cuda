@@ -168,5 +168,6 @@ RUN apt install -y ros-noetic-gazebo-ros-pkgs \
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 
 RUN mkdir /workspace
+RUN chown -R ros:ros /workspace
 
 ENTRYPOINT [ "/bin/bash", "-l", "-c" ]

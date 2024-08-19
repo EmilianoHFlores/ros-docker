@@ -31,5 +31,6 @@ RUN apt install -y ros-humble-ros-gz \
 
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 RUN mkdir /workspace
+RUN chown -R ros:ros /workspace
 
 ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
