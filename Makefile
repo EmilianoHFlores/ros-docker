@@ -49,11 +49,11 @@ noetic.create.cuda:
 # ----------------------------START------------------------------------
 # Start containers
 humble.up:
-	@xhost +
+	@ if [ -n "$(DISPLAY)" ]; then xhost +; fi
 	@docker start ros-humble 
 
 noetic.up:
-	@xhost +
+	@ if [ -n "$(DISPLAY)" ]; then xhost +; fi
 	@docker start ros-noetic
 
 # ----------------------------STOP------------------------------------
