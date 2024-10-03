@@ -2,6 +2,7 @@
 # Use Dockerfile according to NVIDIA GPU and CUDA availability
 
 # Receive ROS version from command line, through the --ros-distro argument
+CUDA_IMAGE="runtime" # default to runtime -> smaller image size
 for i in "$@"
 do
 case $i in
@@ -11,6 +12,17 @@ case $i in
     ;;
     --use-cuda)
     USE_CUDA=YES
+    shift # past argument with no value
+    ;;
+    # Receive the --cuda-devel argument, to use devel images
+    --cuda-image=*)
+    CUDA_IMAGE="${i#*=}"
+    # if cuda image not runtime, devel or base, return error
+    if [ "$CUDA_IMAGE" != "runtime" ] && [ "$CUDA_IMAGE" != "devel" ] && [ "$CUDA_IMAGE" != "base" ] && [ "$CUDA_IMAGE" != "cudnn8-devel" ] && [ "$CUDA_IMAGE" != "cudnn8-runtime" ]; then
+        # echo list of possible values, include cudnn8-devel
+        echo "CUDA image must be: runtime, devel, base, cudnn8-devel, cudnn8-runtime"
+        exit 1
+    fi
     shift # past argument with no value
     ;;
     --l4t=*)
@@ -56,4 +68,4 @@ echo "Building image: $IMAGE_NAME"
 echo "Using Dockerfile: $DOCKER_FILE"
 
 docker build -t $IMAGE_NAME \
-    -f $DOCKER_FILE $PWD --build-arg USER_UID=$USER_UID --build-arg USER_GID=$USER_GID
+    -f $DOCKER_FILE $PWD --build-arg USER_UID=$USER_UID --build-arg USER_GID=$USER_GID --build-arg CUDA_IMAGE=$CUDA_IMAGE

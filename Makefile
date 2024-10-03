@@ -23,7 +23,7 @@ noetic.build:
 	@./docker/scripts/build.bash --ros-distro=noetic
 
 noetic.build.cuda:
-	@./docker/scripts/build.bash --ros-distro=noetic --use-cuda
+	@ ./docker/scripts/build.bash --ros-distro=noetic --use-cuda --cuda-image=$(cuda-image)
 
 
 # ----------------------------CREATE------------------------------------
@@ -43,8 +43,8 @@ humble.create.jetson.35.2.1:
 noetic.create:
 	@./docker/scripts/run.bash --ros-distro=noetic --volumes=$(volumes) --name=$(name)
 
-noetic.create.cuda: 
-	@./docker/scripts/run.bash --ros-distro=noetic --use-cuda --volumes=$(volumes) --name=$(name)
+noetic.create.cuda:  
+	@./docker/scripts/run.bash --ros-distro=noetic --use-cuda --volumes=$(volumes) --name=$(name) 
 
 # ----------------------------START------------------------------------
 # Start containers
