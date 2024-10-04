@@ -16,12 +16,15 @@ case $i in
     ;;
     # Receive the --cuda-devel argument, to use devel images
     --cuda-image=*)
-    CUDA_IMAGE="${i#*=}"
+    CUDA_IMAGE_ARG="${i#*=}"
     # if cuda image not runtime, devel or base, return error
-    if [ "$CUDA_IMAGE" != "runtime" ] && [ "$CUDA_IMAGE" != "devel" ] && [ "$CUDA_IMAGE" != "base" ] && [ "$CUDA_IMAGE" != "cudnn8-devel" ] && [ "$CUDA_IMAGE" != "cudnn8-runtime" ]; then
+    if [ "$CUDA_IMAGE_ARG" != "runtime" ] && [ "$CUDA_IMAGE_ARG" != "devel" ] && [ "$CUDA_IMAGE_ARG" != "base" ] && [ "$CUDA_IMAGE_ARG" != "cudnn8-devel" ] && [ "$CUDA_IMAGE_ARG" != "cudnn8-runtime" ]; then
         # echo list of possible values, include cudnn8-devel
         echo "CUDA image must be: runtime, devel, base, cudnn8-devel, cudnn8-runtime"
         exit 1
+    fi
+    if [ -n CUDA_IMAGE_ARG ]; then
+        CUDA_IMAGE=$CUDA_IMAGE_ARG
     fi
     shift # past argument with no value
     ;;
