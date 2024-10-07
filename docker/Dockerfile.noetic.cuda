@@ -156,7 +156,8 @@ RUN apt-get update -qq && apt-get install -y  build-essential \
     ffmpeg libsm6 libxext6 autoconf libtool mesa-utils \
     terminator nano git wget curl iputils-ping \
     libcanberra-gtk-module libcanberra-gtk3-module \
-    ros-dev-tools 
+    ros-dev-tools python3-catkin-tools python3-vcstool python3-tk \
+    net-tools iputils-ping \ 
     
 # Additional ROS tools
 RUN apt install -y ros-noetic-teleop-twist-keyboard \
