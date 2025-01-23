@@ -23,7 +23,7 @@ noetic.build:
 	@./docker/scripts/build.bash --ros-distro=noetic
 
 noetic.build.cuda:
-	@ ./docker/scripts/build.bash --ros-distro=noetic --use-cuda --cuda-image=$(cuda-image)
+	@ ./docker/scripts/build.bash --ros-distro=noetic --use-cuda --cuda-image=$(cuda-image) --cuda-version=$(cuda-version)
 
 
 # ----------------------------CREATE------------------------------------
