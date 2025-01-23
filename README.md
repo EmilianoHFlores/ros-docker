@@ -109,7 +109,7 @@ docker exec -it --user $(shell id -u):$(shell id -g) my-container bash
 ### Running alternate CUDA images
 CUDA images are available in different versions and types. Versions compatible may vary for your system and the docker Ubuntu version. For compatibility, only 11.8 and 12.1 are accepted, defaulting to 11.8. Image type can be set to "runtime" to include only capability to run CUDA compiled code, while "devel" and "cudnn" images allow for CUDA code compilation and cuDNN support, respectively. Check available images at the [NVIDIA CUDA Docker Hub](https://hub.docker.com/r/nvidia/cuda) and follow the prompt in [the run script](/docker/scripts/build.bash) to set the desired image.
 ```bash
-make <distro>.build.cuda --cuda-image="runtime" --cuda-version="11.8" # Default
+make <distro>.build.cuda cuda-image="runtime" cuda-version="11.8" # Default
 ```
 
 ## Docker container settings
