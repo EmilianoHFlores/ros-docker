@@ -2,7 +2,6 @@
 # Use Dockerfile according to NVIDIA GPU and CUDA availability
 
 # Receive ROS version from command line, through the --ros-distro argument
-CUDA_IMAGE="runtime" # default to runtime -> smaller image size
 for i in "$@"
 do
 case $i in
@@ -14,18 +13,27 @@ case $i in
     USE_CUDA=YES
     shift # past argument with no value
     ;;
-    # Receive the --cuda-devel argument, to use devel images
+    # Receive the --cuda-image argument, to specify CUDA image type
     --cuda-image=*)
     CUDA_IMAGE_ARG="${i#*=}"
     # if cuda image not runtime, devel or base, return error
     if [ "$CUDA_IMAGE_ARG" != "runtime" ] && [ "$CUDA_IMAGE_ARG" != "devel" ] && [ "$CUDA_IMAGE_ARG" != "base" ] && [ "$CUDA_IMAGE_ARG" != "cudnn8-devel" ] && [ "$CUDA_IMAGE_ARG" != "cudnn8-runtime" ]; then
         # echo list of possible values, include cudnn8-devel
-        echo "CUDA image must be: runtime, devel, base, cudnn8-devel, cudnn8-runtime"
-    fi
-    if [ -n CUDA_IMAGE_ARG ]; then
-        CUDA_IMAGE=$CUDA_IMAGE_ARG
+        echo "You can specify CUDA image version as : runtime, devel, base, cudnn8-devel, cudnn8-runtime. Defaulting to runtime."
+        CUDA_IMAGE_ARG="runtime"
     fi
     shift # past argument with no value
+    ;;
+    # Receive the --cuda-version argument, to specify CUDA version. Allow 11.8 and 12.1, default to 11.8
+    --cuda-version=*)
+    CUDA_VERSION="${i#*=}"
+    # if cuda version not 11.8 or 12.1, return error
+    if [ "$CUDA_VERSION" != "11.8" ] && [ "$CUDA_VERSION" != "12.1" ]; then
+        # echo list of possible values
+        echo "You can specify CUDA version as : 11.8, 12.1. Defaulting to 11.8."
+        CUDA_VERSION="11.8"
+    fi
+    shift # past argument=value
     ;;
     --l4t=*)
     # if l4t is not empty, set the l4t version
@@ -39,6 +47,8 @@ case $i in
     ;;
 esac
 done
+
+CUDA_IMAGE="${CUDA_VERSION}.0-${CUDA_IMAGE_ARG}"
 
 # if ros-distro not set, return error
 if [ -z "$ROS_DISTRO" ]; then
