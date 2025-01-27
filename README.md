@@ -11,7 +11,7 @@ Add your user to the docker group to avoid using sudo for docker commands:
 ```bash
 sudo usermod -aG docker $USER
 ```
-Then, log out and log back in so that your group membership is re-evaluated.
+Then, log out and log back in so that your group membership is re-evaluated. This repository has not been tested on machines without sudo access on the docker group.
 
 ### NVIDIA Container Toolkit
 If you are using a GPU, install the NVIDIA Container Toolkit. The installation instructions can be found [here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
@@ -113,4 +113,4 @@ make <distro>.build.cuda --cuda-image="runtime" --cuda-version="11.8" # Default
 ```
 
 ## Docker container settings
-The docker containers are set to use the host network and display, as well as devices such as the webcam. On the run scripts at docker/scripts, these settings may be edited.
+The docker containers are set to use the host network and display, as well as devices such as the webcam. On the run scripts at docker/scripts, these settings may be edited. 
