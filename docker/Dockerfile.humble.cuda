@@ -5,7 +5,8 @@
 ###########################################
 # Base image
 ###########################################
-FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04 AS base
+ARG CUDA_IMAGE
+FROM nvidia/cuda:${CUDA_IMAGE}-ubuntu22.04 AS base
 
 LABEL maintainer="Emiliano Flores <A00833160@tec.mx>"
 

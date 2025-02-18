@@ -11,11 +11,11 @@ humble.build:
 
 # CUDA 11.8 x86_64
 humble.build.cuda:
-	@./docker/scripts/build.bash --ros-distro=humble --use-cuda
+	@./docker/scripts/build.bash --ros-distro=humble --use-cuda --cuda-image=$(cuda-image) --cuda-version=$(cuda-version)
 
 # Jetson L4T 35.2.1
 humble.build.jetson.35.2.1:
-	@./docker/scripts/build.bash --ros-distro=humble --l4t=35.2.1
+	@./docker/scripts/build.bash --ros-distro=humble --l4t=35.2.1 
 
 # ---------NOETIC----------
 
