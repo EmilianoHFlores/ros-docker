@@ -111,6 +111,7 @@ CUDA images are available in different versions and types. Versions compatible m
 ```bash
 make <distro>.build.cuda cuda-image="runtime" cuda-version="11.8" # Default
 ```
+By default, both Humble and Noetic containres will default to image "runtime" and version "11.8" if no argument is given.
 
 ## Docker container settings
 The docker containers are set to use the host network and display, as well as devices such as the webcam. On the run scripts at docker/scripts, these settings may be edited. 
