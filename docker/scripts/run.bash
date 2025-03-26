@@ -94,6 +94,8 @@ if [ -n "$L4T_VERSION" ]; then
     echo "Using L4T $L4T_VERSION"
 fi
 
+MEMORY_LIMIT="--ulimit nofile=1024:524288"
+
 DOCKER_COMMAND="docker run"
 
 xhost +
@@ -103,6 +105,7 @@ $DOCKER_COMMAND -it -d\
     $DOCKER_SSH_AUTH_ARGS \
     $DOCKER_NETWORK_ARGS \
     $ADDITIONAL_COMMANDS \
+    $MEMORY_LIMIT \
     --privileged \
     -e DISPLAY=$DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
