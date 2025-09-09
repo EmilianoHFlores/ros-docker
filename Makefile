@@ -50,51 +50,51 @@ noetic.create.cuda:
 # Start containers
 humble.up:
 	@ if [ -n "$(DISPLAY)" ]; then xhost +; fi
-	@docker start ros-humble 
+	@docker start ros-humble-$(USER)
 
 noetic.up:
 	@ if [ -n "$(DISPLAY)" ]; then xhost +; fi
-	@docker start ros-noetic
+	@docker start ros-noetic-$(USER)
 
 # ----------------------------STOP------------------------------------
 # Stop containers
 humble.down:
-	@docker stop ros-humble 
+	@docker stop ros-humble-$(USER)
 
 noetic.down:
-	@docker stop ros-noetic
+	@docker stop ros-noetic-$(USER)
 
 # ----------------------------RESTART------------------------------------
 # Restart containers
 humble.restart:
-	@docker restart ros-humble 
+	@docker restart ros-humble-$(USER)
 
 noetic.restart:
-	@docker restart ros-noetic
+	@docker restart ros-noetic-$(USER)
 
 # ----------------------------LOGS------------------------------------
 # Logs of the container
 humble.logs:
-	@docker logs --tail 50 ros-humble 
+	@docker logs --tail 50 ros-humble-$(USER)
 
 noetic.logs:
-	@docker logs --tail 50 ros-noetic
+	@docker logs --tail 50 ros-noetic-$(USER)
 
 # ----------------------------SHELL------------------------------------
 # Fires up a bash session inside the container
 humble.shell:
-	@docker exec -it --user $(shell id -u):$(shell id -g) ros-humble bash
+	@docker exec -it --user $(shell id -u):$(shell id -g) ros-humble-$(USER) bash
 
 noetic.shell:
-	@docker exec -it --user $(shell id -u):$(shell id -g) ros-noetic bash
+	@docker exec -it --user $(shell id -u):$(shell id -g) ros-noetic-$(USER) bash
 
 # ----------------------------REMOVE------------------------------------
 # Remove container
 humble.remove:
-	@docker container rm ros-humble 
+	@docker container rm ros-humble-$(USER)
 
 noetic.remove:
-	@docker container rm ros-noetic
+	@docker container rm ros-noetic-$(USER)
 
 # ----------------------------------------------------------------------
 #  General Docker Utilities

@@ -65,20 +65,22 @@ if [ -z "$ROS_DISTRO" ]; then
 fi
 
 DOCKER_FILE="$PWD/docker/Dockerfile.${ROS_DISTRO}"
-IMAGE_NAME="emilianh/ros:$ROS_DISTRO"
+IMAGE_NAME="emilianh/ros-$ROS_DISTRO"
 echo "Building for docker distro: $ROS_DISTRO"
 
 if [ -n "$USE_CUDA" ]; then
     DOCKER_FILE="$PWD/docker/Dockerfile.${ROS_DISTRO}.cuda"
-    IMAGE_NAME="emilianh/ros:$ROS_DISTRO-cuda"
+    IMAGE_NAME="emilianh/ros-$ROS_DISTRO-cuda"
     echo "CUDA Docker image: $CUDA_IMAGE"
 fi
 
 if [ -n "$L4T_VERSION" ]; then
     DOCKER_FILE="$PWD/docker/Dockerfile.${ROS_DISTRO}.l4t${L4T_VERSION}"
-    IMAGE_NAME="emilianh/ros:$ROS_DISTRO-l4t${L4T_VERSION}"
+    IMAGE_NAME="emilianh/ros-$ROS_DISTRO-l4t${L4T_VERSION}"
     echo "Using L4T $L4T_VERSION"
 fi
+
+IMAGE_NAME="$IMAGE_NAME:$USER"
 
 USER_UID=$(id -u)
 USER_GID=$(id -g)

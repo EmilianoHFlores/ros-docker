@@ -75,7 +75,7 @@ done
 IMAGE_NAME="emilianh/ros:$ROS_DISTRO"
 
 if [ -z "$CONTAINER_NAME" ]; then
-    CONTAINER_NAME="ros-$ROS_DISTRO"
+    CONTAINER_NAME="ros-$ROS_DISTRO-$USER"
 fi
 
 echo "Container name: $CONTAINER_NAME"
