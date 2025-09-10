@@ -72,7 +72,7 @@ case $i in
 esac
 done
 
-IMAGE_NAME="emilianh/ros:$ROS_DISTRO"
+IMAGE_NAME="emilianh/ros-$ROS_DISTRO"
 
 if [ -z "$CONTAINER_NAME" ]; then
     CONTAINER_NAME="ros-$ROS_DISTRO-$USER"
@@ -85,14 +85,16 @@ echo "Volumes to mount: $VOLUME_COMMANDS"
 DOCKER_GPU_ARGS=""
 if [ -n "$USE_CUDA" ]; then
     DOCKER_GPU_ARGS="--gpus all"
-    IMAGE_NAME="emilianh/ros:$ROS_DISTRO-cuda"
+    IMAGE_NAME="emilianh/ros-$ROS_DISTRO-cuda"
     echo "Using CUDA"
 fi
 
 if [ -n "$L4T_VERSION" ]; then
-    IMAGE_NAME="emilianh/ros:$ROS_DISTRO-l4t$L4T_VERSION"
+    IMAGE_NAME="emilianh/ros-$ROS_DISTRO-l4t$L4T_VERSION"
     echo "Using L4T $L4T_VERSION"
 fi
+
+IMAGE_NAME="$IMAGE_NAME:$USER"
 
 MEMORY_LIMIT="--ulimit nofile=1024:524288"
 
